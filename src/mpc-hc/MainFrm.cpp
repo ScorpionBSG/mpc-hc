@@ -15597,7 +15597,7 @@ void CMainFrame::SendNowPlayingToApi()
         CStringW buff;
         buff.Format(L"%s|%s|%s|%s|%s", title.GetString(), author.GetString(), description.GetString(), label.GetString(), strDur.GetString());
 
-        SendAPICommand(CMD_NOWPLAYING, buff);
+        SendAPICommand(CMD_NOWPLAYING, L"%s", buff);
         SendSubtitleTracksToApi();
         SendAudioTracksToApi();
     }
@@ -15687,7 +15687,7 @@ void CMainFrame::SendSubtitleTracksToApi()
     } else {
         strSubs.Append(L"-2");
     }
-    SendAPICommand(CMD_LISTSUBTITLETRACKS, strSubs);
+    SendAPICommand(CMD_LISTSUBTITLETRACKS, L"%s", strSubs);
 }
 
 void CMainFrame::SendAudioTracksToApi()
@@ -15736,14 +15736,13 @@ void CMainFrame::SendAudioTracksToApi()
     } else {
         strAudios.Append(L"-2");
     }
-    SendAPICommand(CMD_LISTAUDIOTRACKS, strAudios);
+    SendAPICommand(CMD_LISTAUDIOTRACKS, L"%s", strAudios);
 
 }
 
 void CMainFrame::SendPlaylistToApi()
 {
     CStringW strPlaylist;
-    int index;
     POSITION pos = m_wndPlaylistBar.m_pl.GetHeadPosition(), pos2;
 
     while (pos) {
@@ -15761,13 +15760,12 @@ void CMainFrame::SendPlaylistToApi()
             }
         }
     }
-    index = m_wndPlaylistBar.GetSelIdx();
     if (strPlaylist.IsEmpty()) {
         strPlaylist.Append(L"-1");
     } else {
-        strPlaylist.AppendFormat(L"|%d", index);
+        strPlaylist.AppendFormat(L"|%d", m_wndPlaylistBar.GetSelIdx());
     }
-    SendAPICommand(CMD_PLAYLIST, strPlaylist);
+    SendAPICommand(CMD_PLAYLIST, L"%s", strPlaylist);
 }
 
 void CMainFrame::SendCurrentPositionToApi(bool fNotifySeek)
